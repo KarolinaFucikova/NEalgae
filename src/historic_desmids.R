@@ -60,4 +60,6 @@ text(ord, display = "sites", cex=0.7, col="black")
 # not adding species because that makes the plot illegible
 # xlim and ylim don't work for some reason
 
+# will continue with PCA test
+
 
