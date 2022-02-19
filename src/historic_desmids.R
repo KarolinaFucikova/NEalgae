@@ -60,6 +60,33 @@ text(ord, display = "sites", cex=0.7, col="black")
 # not adding species because that makes the plot illegible
 # xlim and ylim don't work for some reason
 
-# will continue with PCA test
+# nicer plot with ggvegan:
+library("ggvegan")
+library("ggplot2")
+library("viridis")
+library("tidyverse")
+autoplot(ord, layers = "sites", arrows = FALSE)
+auplot <- autoplot(ord, layers = c("sites","species"), arrows = FALSE)
+auplot
+aufort <- fortify(ord, display = c("sites","species"))
+
+# extract site coords (points)
+fort_sites <- aufort %>% 
+  filter(Score == "sites")
+
+# extract species coords
+fort_species <- aufort %>% 
+  filter(Score == "species")
+
+fortify_plot <- ggplot() +
+  geom_point(data = fort_species, aes(x = DCA1, y = DCA2, col = "species")) +
+  geom_point(data = fort_sites, aes(x = DCA1, y = DCA2, col = "sites")) +
+  geom_vline(xintercept = c(0), color = "grey70", linetype = 2) +
+  geom_hline(yintercept = c(0), color = "grey70", linetype = 2) +
+  geom_text(data = fort_sites, aes(x = DCA1, y = DCA2, label = Label)) +
+  labs(x = "DCA1",
+       y = "DCA2",
+       title = "DCA - Historical and current desmid communities")
+fortify_plot
 
 
