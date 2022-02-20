@@ -1,7 +1,9 @@
 # desmid community analyses for historical and new floristic data
 # all records deposited in iNaturalist with images and geolocations
-species_occ <- read.csv(file = "data/Species_occurrences.csv", row.names =1)
+desmids <- read.csv(file = "data/Species_occurrences.csv", row.names =1)
 
+#leave out the genus column for ordination analysis
+species_occ <- desmids[c(1:211),c(1:6)]
 # this data set is cleaned up, compared to the xlsx file which contains notes and preliminary analyses
 # it also has 0s where the original has blanks for species absences
 
@@ -78,15 +80,79 @@ fort_sites <- aufort %>%
 fort_species <- aufort %>% 
   filter(Score == "species")
 
+# selecting just the species whose names I want to show on plot, for example:
+#fort_species_filtered <- fort_species[c(3:33),c(1:6)]
+# genera: rows 1 Actinotaenium, 2 Bambusina, 3:33 Closterium, 34:76 Cosmarium, 
+# 77 Cylindrocystis, 78:84 Desmidium, 85:86 Docidium, 87:107 Euastrum
+# 108 Gonatozygon, 109 Haplotaenium, 110 Hyalotheca, 111 Mesotaenium, 
+# 112:127 Micrasterias, 128:129 Netrium, 130 Onychonema, 131:133 Penium
+# 134:143 Pleurotaenium, 144 Roya, 145 Spinoclosterium, 146:147 Spinocosmarium
+# 148:149 Spirotaenia, 150:151 Spondylosium, 152:190 Staurastrum
+# 191:200 Staurodesmus, 201:202 Teilingia, 203:204 Tetmemorus, 205:206 Triploceras
+# 207:211 Xanthidium
+
+
+# simple version of plot:
 fortify_plot <- ggplot() +
-  geom_point(data = fort_species, aes(x = DCA1, y = DCA2, col = "species")) +
-  geom_point(data = fort_sites, aes(x = DCA1, y = DCA2, col = "sites")) +
+  geom_point(data = fort_species, aes(x = DCA1, y = DCA2)) +
+  geom_point(data = fort_sites, aes(x = DCA1, y = DCA2), size = 3, shape = 2) +
   geom_vline(xintercept = c(0), color = "grey70", linetype = 2) +
   geom_hline(yintercept = c(0), color = "grey70", linetype = 2) +
-  geom_text(data = fort_sites, aes(x = DCA1, y = DCA2, label = Label)) +
+  geom_text(data = fort_sites, aes(x = DCA1, y = DCA2, label = Label), nudge_x = 0.25, nudge_y = 0.25) +
+  #geom_text(data = fort_species_filtered, aes(x = DCA1, y = DCA2, label = Label)) +
   labs(x = "DCA1",
        y = "DCA2",
        title = "DCA - Historical and current desmid communities")
 fortify_plot
 
+# can be made fancier version with colorblind friendly palette, if number of genera are reduced
+#cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
+#          "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
+#fortify_plot3 <- fortify_plot2 + scale_colour_manual(values=cbp1)
+#fortify_plot3
+
+# trying to plot with labels for notable genera; too many points overlap to be visible
+fort_species$genus <- desmids$Genus
+# comment out the genus that you WANT to be labeled
+fort_species$genus[fort_species$genus == "Actinotaenium"] <- "" 
+fort_species$genus[fort_species$genus == "Bambusina"] <- "" 
+fort_species$genus[fort_species$genus == "Closterium"] <- "" 
+fort_species$genus[fort_species$genus == "Cosmarium"] <- "" 
+fort_species$genus[fort_species$genus == "Cylindrocystis"] <- "" 
+#fort_species$genus[fort_species$genus == "Desmidium"] <- ""
+fort_species$genus[fort_species$genus == "Docidium"] <- "" 
+fort_species$genus[fort_species$genus == "Euastrum"] <- "" 
+fort_species$genus[fort_species$genus == "Gonatozygon"] <- "" 
+fort_species$genus[fort_species$genus == "Haplotaenium"] <- "" 
+fort_species$genus[fort_species$genus == "Hyalotheca"] <- "" 
+fort_species$genus[fort_species$genus == "Mesotaenium"] <- "" 
+fort_species$genus[fort_species$genus == "Micrasterias"] <- ""
+fort_species$genus[fort_species$genus == "Netrium"] <- ""
+fort_species$genus[fort_species$genus == "Onychonema"] <- "" 
+fort_species$genus[fort_species$genus == "Penium"] <- "" 
+fort_species$genus[fort_species$genus == "Pleurotaenium"] <- "" 
+fort_species$genus[fort_species$genus == "Roya"] <- ""
+fort_species$genus[fort_species$genus == "Spinoclosterium"] <- "" 
+fort_species$genus[fort_species$genus == "Spinocosmarium"] <- "" 
+fort_species$genus[fort_species$genus == "Spirotaenia"] <- "" 
+fort_species$genus[fort_species$genus == "Spondylosium"] <- "" 
+fort_species$genus[fort_species$genus == "Staurastrum"] <- "" 
+fort_species$genus[fort_species$genus == "Staurodesmus"] <- "" 
+fort_species$genus[fort_species$genus == "Teilingia"] <- "" 
+fort_species$genus[fort_species$genus == "Tetmemorus"] <- "" 
+fort_species$genus[fort_species$genus == "Triploceras"] <- ""
+fort_species$genus[fort_species$genus == "Xanthidium"] <- "" 
+
+
+fortify_plot4 <- ggplot() +
+  geom_point(data = fort_species, aes(x = DCA1, y = DCA2)) +
+  geom_point(data = fort_sites, aes(x = DCA1, y = DCA2), size = 3, shape = 2) +
+  geom_vline(xintercept = c(0), color = "grey70", linetype = 2) +
+  geom_hline(yintercept = c(0), color = "grey70", linetype = 2) +
+  geom_text(data = fort_sites, aes(x = DCA1, y = DCA2, label = Label), nudge_x = 0.25, nudge_y = 0.25) +
+  geom_text(data = fort_species, aes(x = DCA1, y = DCA2, label = genus), nudge_x = 0.25, nudge_y = 0.25) +
+  labs(x = "DCA1",
+       y = "DCA2",
+       title = "DCA - Historical and current desmid communities")
+fortify_plot4
