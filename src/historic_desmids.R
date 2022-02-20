@@ -57,8 +57,11 @@ text(ord, display = "spec", cex=0.7, col="blue")
 # apparently can add the clustergram
 plot(ord, type = "n", ylim = c(-2,3), xlim = c(-2,3))
 ordicluster(ord,occ_hc)
-points(ord, display = "sites", cex = 0.8, pch=21, col="yellow", bg="yellow")
-text(ord, display = "sites", cex=0.7, col="black")
+points(ord, display = "sites", pch = 2, col="#56B4E9", cex = 1.5)
+points(ord, display = "species", pch = 1, col="#0072B2", cex = 1)
+text(ord, display = "sites", cex=1, col="black", adj = c(1.2,0))
+legend(3, 2, c("sites", "species"),
+       col=c("#56B4E9", "#0072B2"), pch=c(2,1), cex=1)
 # not adding species because that makes the plot illegible
 # xlim and ylim don't work for some reason
 
