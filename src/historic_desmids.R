@@ -147,7 +147,6 @@ fort_species$genus[fort_species$genus == "Tetmemorus"] <- ""
 fort_species$genus[fort_species$genus == "Triploceras"] <- ""
 fort_species$genus[fort_species$genus == "Xanthidium"] <- "" 
 
-
 fortify_plot4 <- ggplot() +
   geom_point(data = fort_species, aes(x = DCA1, y = DCA2)) +
   geom_point(data = fort_sites, aes(x = DCA1, y = DCA2), size = 3, shape = 2) +
