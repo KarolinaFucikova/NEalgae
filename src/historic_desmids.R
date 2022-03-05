@@ -94,7 +94,6 @@ fort_species <- aufort %>%
 # 191:200 Staurodesmus, 201:202 Teilingia, 203:204 Tetmemorus, 205:206 Triploceras
 # 207:211 Xanthidium
 
-
 # simple version of plot:
 fortify_plot <- ggplot() +
   geom_point(data = fort_species, aes(x = DCA1, y = DCA2)) +
