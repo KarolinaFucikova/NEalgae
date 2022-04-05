@@ -11,7 +11,6 @@ species_occ <- desmids[c(1:211),c(1:6)]
 colSums(species_occ)
 
 library(vegan)
-
 # the first part of this code is commented out - it does not make sense to include HB1967 in the analysis
 # the commands that compute dissimilarity require the data samples to be rows
 # we will transpose 
