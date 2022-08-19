@@ -1,5 +1,6 @@
 # desmid community analyses for historical and new floristic data
 # all records deposited in iNaturalist with images and geolocations
+# read in the data
 desmids <- read.csv(file = "data/Species_occurrences.csv", row.names =1)
 
 #leave out the genus column for ordination analysis
