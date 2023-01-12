@@ -33,12 +33,29 @@ transp_occ <- t(clean_occ)
 
 # calculate the Jaccard index using
 # Jaccard is appropriate for presence/absence data
+# the default is to calculate dissimilarity, so similarity is calculated by 1-dissimilarity
 jac <- 1-vegdist(transp_occ,method="jaccard")
+jac
+# the following line will also return the similarity table, if desired:
+#1-dist(transp_occ, method="binary")
+
+# bray-curtis (sorensen) is also appropriate but slightly different:
+bray <- 1-vegdist(transp_occ, method="bray")
+bray
 
 # now we'll make a hierarchical cluster object, which will be the basis of the dendrogram
-occ_hc <-hclust(jac)
+# here we do want to use the default dissimilarity/distance measures
+# calculate them first
+jac1 <- vegdist(transp_occ, method="jaccard")
+occ_hc <-hclust(jac1)
 # and finally the dendrogram
-plot(occ_hc)
+plot(occ_hc, xlab="Sampled Localities", ylab="Jaccard Dissimilarity", main = NULL, cex=1.5, cex.lab=1.3, cex.axis=1.5, lwd=2)
+
+# same for bray-curtis dendrogram
+bray1 <- vegdist(transp_occ, method="bray")
+occ_hcbray <-hclust(bray1)
+plot(occ_hcbray, xlab="Sampled Localities", ylab="Bray-Curtis Dissimilarity", main = NULL, cex=1.5, cex.lab=1.3, cex.axis=1.5, lwd=2)
+# the plots are about the same, not surprisingly
 
 # trying detrended correspondence analysis
 # probably don't have enough data for it but seems most appropriate according to
@@ -71,9 +88,9 @@ table_toplot <- table_toplot[,c(1:2)]
 species_toplot_table <- table_toplot[rownames(table_toplot) %in% species_toplot, ]
 
 
-# apparently can add the clustergram
+# apparently can add the clustergram, but it looks awful
 plot(ord, type = "n", ylim = c(-2,3), xlim = c(-2,3))
-ordicluster(ord,occ_hc)
+ordicluster(ord,occ_hcbray)
 points(ord, display = "sites", pch = 2, col="#56B4E9", cex = 1.5)
 points(ord, display = "species", pch = 1, col="#0072B2", cex = 1)
 text(ord, display = "sites", cex=1, col="black", adj = c(1.2,0))
